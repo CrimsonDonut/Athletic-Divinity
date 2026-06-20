@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% extends 'base.html' %}
+
+{% block title %}Women - Athletic Divinity{% endblock %}
+
+{% block content %}
+    <section id="page-header2">
+        <h2>Womens</h2>
+        <p>Everyone loves them, and so will you.</p>
+    </section>
+    <section id="product1" class="section-p1">
+        <div class="pro-container" id="women-products">
+            <!-- Products will be loaded dynamically from API -->
+        </div>
+    </section>
+
+<script>
+// Load women's products dynamically from database
+async function loadWomensProducts() {
+    try {
+        const response = await fetch('/api/products?category=women');
+        const data = await response.json();
+        
+        if (data.success && data.products) {
+            const container = document.getElementById('women-products');
+            
+            data.products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'pro';
+                productCard.dataset.id = product.id;
+                productCard.innerHTML = `
+                    <img src="/static/${product.image}" alt="">
+                    <div class="des">
+                        <span>${product.brand}</span>
+                        <h5>${product.name}</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}</h4>
+                    </div>
+                    <a href="#"><i class="fa-regular fa-hand-pointer"></i></a>
+                `;
+                container.appendChild(productCard);
+            });
+            
+            // Attach event handlers to newly created product cards
+            if (typeof attachProductCardHandlers === 'function') {
+                attachProductCardHandlers();
+            }
+        }
+    } catch (error) {
+        console.error('Error loading womens products:', error);
+    }
+}
+
+// Load products when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadWomensProducts);
+} else {
+    loadWomensProducts();
+}
+</script>
+{% endblock %}

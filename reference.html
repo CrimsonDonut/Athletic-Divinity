@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athletic Divinity</title>
+    <script src="https://kit.fontawesome.com/f0591ad940.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+
+<body style="background-color:#181f20;">
+    <section id="header">
+        <a href="#"><img src="img\logoreal.png" height="80" width="110" alt=""></a>
+      
+        <div>
+            <ul id="navbar"> 
+                <li><a class="active" href="index.html">Home</a></li>
+                <li><a href="women.html">Women</a></li>
+                <li><a href="men.html">Men</a></li>
+                <li><a href="accesories.html">Accesories</a></li>
+                <li><a href="about.html">About</a></li>
+                <li id="lg-bag"><a href="cart.html" class="cart-link"><i class="fa-solid fa-basket-shopping"></i>
+                <span id="cart-count" class="cart-count-badge">0</span></a></li>
+                <a href="#" id="close"><i class="fa fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            
+            <a href="cart.html" class="cart-link">
+            <i class="fa-solid fa-bag-shopping" id="cart-icon"></i>
+            <span id="cart-count-m" class="cart-count-badge">0</span>
+            </a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="prodetails" class="section-p1">
+        <div class="single-pro-image">
+        <img src="img/products/fnb2.png" width="100%" id="MainImg" alt=""> 
+        <div class="small-img-group">
+            <div class="small-img-col">
+                <img src="img/products/fnb2.png" width="100%" class="small-img" alt="">
+            </div>
+            <div class="small-img-col">
+                <img src="img/products/fnb3.png" width="100%" class="small-img" alt="">
+            </div>
+            <div class="small-img-col">
+                <img src="img/products/fnb4.png" width="100%" class="small-img" alt="">
+            </div>
+            <div class="small-img-col">
+                <img src="img/products/fnb5.png" width="100%" class="small-img" alt="">
+            </div>
+        </div>       
+        </div>
+
+        <div class="single-pro-details">
+            <h6>Home / Category</h6>
+            <h4>Wings of Divinity</h4>
+
+            <h2 id="priceDisplay">₱0.00</h2>
+
+            <form oninput="document.getElementById('totalOutput').value = multiply(document.getElementById('qty'), document.getElementById('price'))">
+            <input type="number" id="qty" name="Quantity" min="0" max="99" value="1">
+            <input type="hidden" id="price" name="UnitPrice" value="450">
+            <output id="totalOutput" name="total" for="qty price" style="color:white; font-weight:bold;">Total: ₱0.00</output> <!-- make this dynamic so it can be used for different priced products -->
+            </form>
+
+            <select>
+                <option>Select Size</option>
+                <option>XXL</option>
+                <option>XL</option>
+                <option>Large</option>
+                <option>Medium</option>
+                <option>Small</option>
+                <option>XS</option>
+            </select>
+            <button class="normal">Add To Cart</button>
+            <h4>Description </h4>
+            <span>Whether you’re layering up or down, these physique-enhancing fits are the one. </span>
+        </div>
+    </section>
+
+    <section id="product1" class="section-p1">
+        <h2>Shorts to match</h2>
+        <p>Elysium Compression</p>
+        <div class="pro-container">
+            <div class="pro" data-id="17">
+                <img src="img/products/t2.png" alt="">
+                <div class="des">
+                    <span>Athletic Divinity</span>
+                    <h5>Crown of Night</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>₱250</h4>
+                </div>
+                <a href="#"><i class="fa-regular fa-hand-pointer"></i></i></a>
+            </div>
+            <div class="pro" data-id="15">
+                <img src="img/products/t3.png" alt="">
+                <div class="des">
+                    <span>Athletic Divinity</span>
+                    <h5>Cloudy Night</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>₱250</h4>
+                </div>
+                <a href="#"><i class="fa-regular fa-hand-pointer"></i></i></a>
+            </div>
+            <div class="pro" data-id="16">
+                <img src="img/products/t4.png" alt="">
+                <div class="des">
+                    <span>Athletic Divinity</span>
+                    <h5>Seething Blood</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>₱250</h4>
+                </div>
+                <a href="#"><i class="fa-regular fa-hand-pointer"></i></i></a>
+            </div>
+            <div class="pro" data-id="14">
+                <img src="img/products/t1.png" alt="">
+                <div class="des">
+                    <span>Athletic Divinity</span>
+                    <h5>Silent Midnight</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>₱250</h4>
+                </div>
+                <a href="#"><i class="fa-regular fa-hand-pointer"></i></i></a>
+            </div>
+
+    </section>
+
+    <section id="newsletter" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4>Sign up for better deals</h4>
+            <p>Get E-mail updates about our <span>latest offers</span></p>
+        </div>
+        <div class="form">
+            <input type="text" placeholder="Your E-mail address">
+            <button class="normal">Sign up</button>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="img/logoreal.png" height="100" width="130" alt="">
+            <h4>Contact</h4>
+            <p> <strong>Address:</strong> Tanauan City, Batangas, Philippines</p>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.3743315143447!2d121.08955777596039!3d14.05505918636924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd6f9b346e978d%3A0x93b8e1431179a83a!2sPeterson%20Gamefarm!5e0!3m2!1sen!2sph!4v1760514764783!5m2!1sen!2sph" width="400" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <p><strong>Phone:</strong> 0927 929 1959</p>
+            <p><strong>Hours:</strong> 10:00 - 18:00, Mon - Sat </p>
+            <div class="follow">
+                <h4>Follow Us</h4>
+                <div class="icon">
+                    <a href="https://www.facebook.com/profile.php?id=61566931697897" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <i class="fab fa-twitter"></i>
+                    <a href="https://www.instagram.com/crimsonndonut/?hl=en" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <i class="fab fa-pinterest-p"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About Us</a>
+            <a href="#">Refer a friend</a>
+            <a href="#">Sustainability</a>
+            <a href="#">Training App</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Privacy Notice</a>
+        </div>
+
+         <div class="col">
+            <h4>My Account</h4>
+            <a href="#" id="loginLink">Login</a>
+            <a href="#" id="registerLink">Register</a>
+        </div>
+
+
+        <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2>Login</h2>
+
+            <div class="input-with-icon">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <i id="loginIcon" class="fa-solid fa-check"></i>
+            </div>
+            
+            <div class="input-with-icon">
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <i id="loginPasswordIcon" class="fa-solid fa-circle-xmark"></i>
+            </div>
+
+            <button id="loginBtn">Submit</button>
+            <div class="switch-text">
+            Wala? Gawa ka muna ng account <span id="openRegister">Register</span>
+            </div>
+        </div>
+        </div>
+
+
+        <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeRegister">&times;</span>
+            <h2>Register</h2>
+
+            <div class="input-with-icon">
+                <input type="text" id="registerName" placeholder="Full Name" required>
+                <i id="registerNameIcon" class="fa-solid fa-circle-xmark"></i>
+            </div>
+            
+            <div class="input-with-icon">
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <i id="regIcon" class="fa-solid fa-check"></i>
+            </div>
+            
+            <div class="input-with-icon">
+                <input type="password" id="registerPassword" placeholder="Password" required>
+                <i id="registerPasswordIcon" class="fa-solid fa-circle-xmark"></i>
+            </div>
+            
+            <button id="registerBtn">Register</button>
+            <div class="switch-text">
+            Already have an account? <span id="openLogin">Login</span>
+            </div>
+        </div>
+        </div>
+
+        <div class="col install">
+            <h4>Install App</h4>
+            <p>From App Store or Google Play</p>
+            <div class="row">
+                <img src="img/pay/app.jpg" alt="">
+                <img src="img/pay/play.jpg" alt="">
+            </div>
+            <p>Secured Payment Gateways</p>
+            <img src="img/pay/pay.png" usemap="#paymap" alt="">
+            <map name="paymap">
+                <area shape="rect" coords="1, 30, 62, 1" href="https://www.visa.com.ph/" alt="">
+                <area shape="rect" coords="72, 31, 121, 1" href="https://www.mastercard.com.ph/en-ph.html" alt="">
+                <area shape="rect" coords="133, 31, 182, 1" href="https://www.mastercard.com.ph/en-ph.html" alt="">
+                <area shape="rect" coords="187, 30, 221, 1" href="https://gcash.com/" alt="">
+            </map>
+        </div>
+
+        <div class="copyright">
+            <p>© 2025 | Athletic Divinity | All Rights Reserved. | We Lift.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

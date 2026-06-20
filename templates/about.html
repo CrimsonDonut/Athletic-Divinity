@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}About - Athletic Divinity{% endblock %}
+
+{% block content %}
+    <section id="hero2">
+        <div class="hero2-content">
+            <h1>About Athletic Divinity</h1>
+            <p class="hero2-subtitle">Built in the Philippines, Athletic Divinity is a performance-driven sportswear brand dedicated to creating premium, aesthetic, and confidence-boosting apparel for athletes, gym-goers, and everyday movers.</p>
+            <p class="hero2-description">What started as a simple school project quickly transformed into a vision — a brand committed to empowering people to feel unstoppable. We design every piece with intention: comfort, durability, and style that elevates every workout, every rep, every moment of discipline.</p>
+            <p class="hero2-quote">"Train hard. Eat hard. Rest hard. Trust the process."</p>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+    <div class="full-video-banner">
+        <video src="{{ url_for('static', filename='custom shirt/modelraw.jfif') }}" autoplay muted loop playsinline></video>
+    </div>
+
+    <section id="newsletter" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4>Sign up for better deals</h4>
+            <p>Get E-mail updates about our <span>latest offers</span></p>
+        </div>
+        <div class="form">
+            <input type="text" id="newsletter-email" placeholder="Your E-mail address">
+            <button class="normal" id="signup-btn">Sign up</button>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Athletic Divinity{% endblock %}</title>
+    <script src="https://kit.fontawesome.com/f0591ad940.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body style="background-color:#111819;">
+    <section id="header">
+        <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='img/logoreal.png') }}" height="90" width="120" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('women') }}">Women</a></li>
+                <li><a href="{{ url_for('men') }}">Men</a></li>
+                <li><a href="{{ url_for('accesories') }}">Accesories</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li id="lg-bag"><a href="{{ url_for('cart') }}" class="cart-link"><i class="fa-solid fa-basket-shopping"></i>
+                <span id="cart-count" class="cart-count-badge">0</span></a></li>
+                <a href="#" id="close"><i class="fa fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="{{ url_for('cart') }}" class="cart-link">
+            <i class="fa-solid fa-bag-shopping" id="cart-icon"></i>
+            <span id="cart-count-m" class="cart-count-badge">0</span>
+            </a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    {% block content %}{% endblock %}
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="{{ url_for('static', filename='img/logoreal.png') }}" height="100" width="130" alt="">
+            <h4>Contact</h4>
+            <p> <strong>Address:</strong> Tanauan City, Batangas, Philippines</p>
+            <p><strong>Phone:</strong> 0927 929 1959</p>
+            <p><strong>Hours:</strong> 10:00 - 18:00, Mon - Sat </p>
+            <div class="follow">
+                <h4>Follow Us</h4>
+                <div class="icon">
+                    <a href="https://www.facebook.com/profile.php?id=61566931697897" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/crimsonndonut/?hl=en" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="{{ url_for('about') }}">About Us</a>
+            <a href="#">Refer a friend</a>
+            <a href="#">Sustainability</a>
+            <a href="#">Training App</a>
+            <a href="{{ url_for('terms') }}">Terms & Conditions</a>
+            <a href="#">Privacy Notice</a>
+        </div>
+
+         <div class="col">
+            <h4>My Account</h4>
+            <a href="#" id="loginLink">Login</a>
+            <a href="#" id="registerLink">Register</a>
+            <a href="#" id="logoutLink" style="display:none;">Logout</a>
+            <a href="#" id="userNameLink" style="display:none;"></a>
+        </div>
+
+        <div class="col install">
+            <h4>Install App</h4>
+            <p>From App Store or Google Play</p>
+            <div class="row">
+                <img src="{{ url_for('static', filename='img/pay/app.jpg') }}" alt="">
+                <img src="{{ url_for('static', filename='img/pay/play.jpg') }}" alt="">
+            </div>
+            <p>Secured Payment Gateways</p>
+            <img src="{{ url_for('static', filename='img/pay/pay.png') }}" usemap="#paymap" alt="">
+        </div>
+
+        <div class="copyright">
+            <p>© 2025 | Athletic Divinity | All Rights Reserved. | We Lift.</p>
+        </div>
+    </footer>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span id="closeModal" class="close">&times;</span>
+            <h3>Login</h3>
+            <form class="auth-form">
+                <label for="loginEmail">Email</label>
+                <input id="loginEmail" type="email" placeholder="you@example.com">
+                <i id="loginIcon" class="fa-solid"></i>
+
+                <label for="loginPassword">Password</label>
+                <input id="loginPassword" type="password" placeholder="••••••">
+                <i id="loginPasswordIcon" class="fa-solid"></i>
+
+                <button id="loginBtn" class="btn">Login</button>
+                <p>Don't have an account? <a href="#" id="openRegister">Register</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span id="closeRegister" class="close">&times;</span>
+            <h3>Register</h3>
+            <form class="auth-form">
+                <label for="registerName">Name</label>
+                <input id="fullName" type="text" placeholder="Full name">
+                <i id="registerNameIcon" class="fa-solid"></i>
+
+                <label for="registerEmail">Email</label>
+                <input id="registerEmail" type="email" placeholder="you@example.com">
+                <i id="regIcon" class="fa-solid"></i>
+
+                <label for="registerPassword">Password</label>
+                <input id="registerPassword" type="password" placeholder="At least 6 characters">
+                <i id="registerPasswordIcon" class="fa-solid"></i>
+
+                <button id="registerBtn" class="btn">Create account</button>
+                <p>Already have an account? <a href="#" id="openLogin">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="sizeModal" class="modal">
+        <div class="modal-content size-modal">
+            <span id="closeSizeModal" class="close">&times;</span>
+            <div class="size-modal-body">
+                <img id="sizePreviewImg" src="{{ url_for('static', filename='img/products/a1.jfif') }}" alt="Size preview">
+                <div class="size-options">
+                    <h3>Select Size</h3>
+                    <div class="sizes">
+                        <button class="size-option" data-size="S">S</button>
+                        <button class="size-option" data-size="M">M</button>
+                        <button class="size-option" data-size="L">L</button>
+                        <button class="size-option" data-size="XL">XL</button>
+                    </div>
+                    <select id="sizeSelect" style="margin-top:12px; padding:6px;">
+                        <option value="">Choose size</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select>
+                    <button id="confirmSizeBtn" class="btn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% block scripts %}{% endblock %}
+    
+    <script>
+      // Highlight the current page in navbar
+      document.addEventListener('DOMContentLoaded', () => {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('#navbar a');
+        
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          
+          const href = link.getAttribute('href');
+          if (href === '/' && currentPath === '/') {
+            link.classList.add('active');
+          } else if (href !== '/' && currentPath.includes(href)) {
+            link.classList.add('active');
+          }
+        });
+      });
+    </script>
+</body>
+</html>

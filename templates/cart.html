@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart - Athletic Divinity{% endblock %}
+
+{% block content %}
+  <section id="page-header">
+    <h2>#YourCart</h2>
+    <p>Manage your items and get ready to check out.</p>
+  </section>
+
+  <section id="mystery-pick" class="section-p1" style="text-align:center; color:white;">
+    <h3>Feeling Adventurous?</h3>
+    <label style="font-size:14px;"><input type="checkbox" id="pushButton"> PUSH BUTTON 🔥</label>
+    <br><br>
+    <button id="resetChoice" class="normal" style="margin-right:10px;">Clear</button>
+    <button id="btn" class="normal" style="background-color:#e6ac0f;">Choose For Me</button>
+    <div id="randomPickResult" style="margin-top:20px;"></div>
+  </section>
+
+  <section id="cart" class="section-p1">
+    <table>
+      <thead>
+        <tr>
+          <th>Remove</th>
+          <th>Image</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="cart-summary" id="cart-summary">
+      <div id="satisfaction-container">
+        <label for="satisfaction">Rate your satisfaction:</label><br>
+        <input type="range" id="satisfaction" name="satisfaction" min="0" max="10" value="5" step="1">
+        <span id="satisfaction-value">5</span>/10
+      </div>
+      <div style="text-align: right;">
+        <h3>Total: ₱0.00</h3>
+        <button class="checkout-btn">Proceed to Checkout</button>
+      </div>
+    </div>
+  </section>
+{% endblock %}

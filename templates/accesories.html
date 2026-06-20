@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Accessories - Athletic Divinity{% endblock %}
+
+{% block content %}
+    <section id="page-header">
+        <h2>All Accessories</h2>
+        <p>Save more with coupons & up to 60% off!</p>
+    </section>
+
+    <section id="product1" class="section-p1">
+        <div class="pro-container" id="accessories-products">
+            <!-- Products will be loaded dynamically from API -->
+        </div>
+    </section>
+
+<script>
+// Load accessories products dynamically from database
+async function loadAccessoriesProducts() {
+    try {
+        const response = await fetch('/api/products?category=accessories');
+        const data = await response.json();
+        
+        if (data.success && data.products) {
+            const container = document.getElementById('accessories-products');
+            
+            data.products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'pro';
+                productCard.dataset.id = product.id;
+                productCard.innerHTML = `
+                    <img src="/static/${product.image}" alt="">
+                    <div class="des">
+                        <span>${product.brand}</span>
+                        <h5>${product.name}</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}</h4>
+                    </div>
+                    <a href="#"><i class="fa-regular fa-hand-pointer"></i></a>
+                `;
+                container.appendChild(productCard);
+            });
+            
+            // Attach event handlers to newly created product cards
+            if (typeof attachProductCardHandlers === 'function') {
+                attachProductCardHandlers();
+            }
+        }
+    } catch (error) {
+        console.error('Error loading accessories products:', error);
+    }
+}
+
+// Load products when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadAccessoriesProducts);
+} else {
+    loadAccessoriesProducts();
+}
+</script>
+{% endblock %}

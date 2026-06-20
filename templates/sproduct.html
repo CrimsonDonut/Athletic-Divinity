@@ -1,0 +1,196 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Product - Athletic Divinity{% endblock %}
+
+{% block content %}
+<section id="prodetails" class="section-p1">
+  <div class="single-pro-image">
+    <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" width="100%" id="MainImg" alt="" style="background: #f0f0f0; min-height: 400px;">
+    <div class="small-img-group">
+      <!-- Thumbnails populated by script.js -->
+    </div>
+  </div>
+
+  <div class="single-pro-details">
+    <h6 id="category">Loading...</h6>
+    <h4 id="productName">Loading...</h4>
+
+    <h2 id="priceDisplay">Loading...</h2>
+
+    <form oninput="document.getElementById('totalOutput').value = multiply(document.getElementById('qty'), document.getElementById('price'))">
+    <input type="number" id="qty" name="Quantity" min="0" max="99" value="1">
+    <input type="hidden" id="price" name="UnitPrice" value="0">
+    <output id="totalOutput" name="total" for="qty price" style="color:white; font-weight:bold;">Total: ₱0.00</output>
+    </form>
+
+    <select id="sizeSelect">
+      <option>Select Size</option>
+      <option>XXL</option>
+      <option>XL</option>
+      <option>Large</option>
+      <option>Medium</option>
+      <option>Small</option>
+      <option>XS</option>
+    </select>
+    <button class="normal">Add To Cart</button>
+    <h4>Description </h4>
+    <span id="description">Loading...</span>
+  </div>
+</section>
+
+<script>
+// Load product details from API
+async function loadProductDetails() {
+    try {
+        // Get product ID from URL query parameter
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+        
+        console.log('Product ID from URL:', productId);
+        
+        if (!productId) {
+            console.error('No product ID provided');
+            document.getElementById('productName').textContent = 'Error: No product ID provided';
+            return;
+        }
+        
+        // Fetch product from API
+        console.log(`Fetching /api/products/${productId}`);
+        const response = await fetch(`/api/products/${productId}`);
+        console.log('Response status:', response.status);
+        
+        const data = await response.json();
+        console.log('API Response:', data);
+        
+        if (!data.success) {
+            console.error('API returned error:', data.error);
+            document.getElementById('productName').textContent = 'Product not found';
+            return;
+        }
+        
+        if (!data.product) {
+            console.error('No product in response');
+            document.getElementById('productName').textContent = 'Product not found';
+            return;
+        }
+        
+        const product = data.product;
+        console.log('Product loaded successfully:', product.name);
+        
+        // Update all elements
+        document.getElementById('MainImg').src = `/static/${product.image}`;
+        document.getElementById('category').textContent = product.category;
+        document.getElementById('productName').textContent = product.name;
+        document.getElementById('price').value = product.price;
+        document.getElementById('priceDisplay').textContent = `₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
+        document.getElementById('totalOutput').value = `Total: ₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
+        document.getElementById('description').textContent = `${product.name} from ${product.brand}. Crafted with premium quality for durability and style.`;
+        
+        // Populate thumbnail images
+        let images = [];
+        if (product.images) {
+            // If images is a JSON string, parse it
+            if (typeof product.images === 'string') {
+                try {
+                    images = JSON.parse(product.images);
+                } catch (e) {
+                    console.error('Error parsing images JSON:', e);
+                    images = [{src: product.image, label: product.name}];
+                }
+            } else {
+                images = product.images;
+            }
+        } else {
+            // Fallback to single image
+            images = [{src: product.image, label: product.name}];
+        }
+        
+        // Create thumbnail HTML
+        const smallGroup = document.querySelector('.small-img-group');
+        if (smallGroup) {
+            smallGroup.innerHTML = images
+                .map(img => `<div class="small-img-col"><img src="/static/${img.src}" width="100%" class="small-img" alt="${img.label}" data-label="${img.label}"></div>`)
+                .join('');
+            
+            // Add click handlers for thumbnails
+            document.querySelectorAll('.small-img').forEach(thumb => {
+                thumb.addEventListener('click', () => {
+                    document.getElementById('MainImg').src = thumb.src;
+                    document.getElementById('productName').textContent = thumb.dataset.label;
+                });
+            });
+        }
+        
+        // Store product object on window for add to cart button
+        window.currentProduct = product;
+        window.currentProductImages = images;
+        
+        // Add to Cart button handler
+        const addToCartBtn = document.querySelector('.single-pro-details button.normal');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                
+                // Get logged-in user email
+                const loggedInUser = localStorage.getItem('loggedInUser');
+                const userEmail = loggedInUser ? JSON.parse(loggedInUser).email : '';
+                
+                if (!userEmail) {
+                    alert('🔐 Please log in to add items to your cart. Create an account or log in to get started!');
+                    return;
+                }
+                
+                const qty = parseInt(document.getElementById('qty').value) || 1;
+                const mainImg = document.getElementById('MainImg').src;
+                
+                const cartItem = {
+                    product_id: product.id,
+                    product_name: product.name,
+                    product_image: mainImg,
+                    price: product.price,
+                    quantity: qty,
+                    user_email: userEmail
+                };
+                
+                try {
+                    const response = await fetch('/api/cart/add', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(cartItem)
+                    });
+                    
+                    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+                    const data = await response.json();
+                    
+                    if (!data.success) throw new Error(data.error || 'Failed to add to cart');
+                    
+                    alert('✅ Product added to cart!');
+                    
+                    // Update cart icon
+                    if (typeof updateCartBadge === 'function') {
+                        updateCartBadge();
+                    }
+                } catch (err) {
+                    console.error('Error adding to cart:', err);
+                    alert('❌ Error adding to cart: ' + err.message);
+                }
+            });
+        }
+        
+        window.selectedProductId = product.id;
+        console.log('All elements updated successfully!');
+        
+    } catch (error) {
+        console.error('Exception caught:', error);
+        document.getElementById('productName').textContent = 'Error: ' + error.message;
+    }
+}
+
+// Run when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadProductDetails);
+} else {
+    loadProductDetails();
+}
+</script>
+{% endblock %}

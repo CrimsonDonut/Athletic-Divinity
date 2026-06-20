@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms & Conditions - Athletic Divinity{% endblock %}
+
+{% block content %}
+  <section id="page-header">
+    <h2>#Be_real</h2>
+    <p>Leave a message!, we'd love to hear from you!</p>
+  </section>
+  <div class="pdf-container">
+    <embed src="{{ url_for('static', filename='terms.pdf') }}" type="application/pdf" width="80%" height="900px">
+  </div>
+{% endblock %}
+

@@ -1,0 +1,4 @@
+Add: 
+Don't open modals for products with no sizes
+make modal code dynamic for it to be reusable to multiple pages
+Fix Order Form - not remembering cart items

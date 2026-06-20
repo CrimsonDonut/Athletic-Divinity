@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Athletic Divinity{% endblock %}
+
+{% block content %}
+  <section id="page-header">
+    <h2>Complete Your Registration</h2>
+    <p>We just need a few more details!</p>
+  </section>
+
+  <section id="register-form-container">
+    <form id="register-form">
+      <h2>Complete Your Registration</h2>
+      <fieldset class="basic-info">
+        <legend>Basic Information</legend>
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="Full Name" required><br>
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Email" required><br>
+        
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Password" required><br>
+      </fieldset>
+
+      <fieldset class="basic-info">
+        <legend>Additional Information</legend>
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="Phone Number"><br>
+        
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" placeholder="Date of Birth"><br>
+      </fieldset>
+
+      <fieldset class="basic-info">
+        <legend>Preferences</legend>
+        <label>Select Gender:</label>
+        <div id="gender-group">
+          <label><input type="radio" name="gender" value="Male" required> Male</label>
+          <label><input type="radio" name="gender" value="Female"> Female</label>
+        </div>
+      </fieldset>
+
+      <button type="submit">Finish Register</button>
+    </form>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Get email from URL parameter and fill the form
+  function populateEmailFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailFromUrl = urlParams.get('email');
+    
+    console.log('Email from URL:', emailFromUrl);
+    
+    if (emailFromUrl) {
+      const emailField = document.getElementById('email');
+      console.log('Email field found:', emailField);
+      
+      if (emailField) {
+        const decodedEmail = decodeURIComponent(emailFromUrl);
+        console.log('Setting email to:', decodedEmail);
+        emailField.value = decodedEmail;
+      }
+    }
+  }
+  
+  // Run immediately
+  populateEmailFromUrl();
+  
+  // Also run when DOM is ready (in case there's a delay)
+  document.addEventListener('DOMContentLoaded', populateEmailFromUrl);
+</script>
+{% endblock %}
+

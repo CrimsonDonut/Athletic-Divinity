@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - Athletic Divinity{% endblock %}
+
+{% block content %}
+  <main class="section-p1">
+    <div class="checkout-grid">
+      <section class="checkout-left">
+        <h2>Shipping Information</h2>
+        <form id="checkoutForm" class="checkout-form">
+          <div class="form-row">
+            <label for="address">Shipping address</label>
+            <textarea id="address" name="address" rows="3" placeholder="House number, street, barangay, city" required></textarea>
+          </div>
+
+          <div class="delivery-options">
+            <h4>Payment method</h4>
+            <label><input type="radio" name="payment" value="cod" checked> Cash on Delivery</label>
+            <label><input type="radio" name="payment" value="gcash"> GCash</label>
+          </div>
+        </form>
+      </section>
+
+      <aside class="checkout-right">
+        <h2>Order summary</h2>
+        <div id="order-items" class="order-items"></div>
+        <div class="summary-line"><span>Items total</span><span id="itemsTotal">₱0.00</span></div>
+        <div class="summary-line"><span>Delivery</span><span id="deliveryFee">₱0.00</span></div>
+        <div class="summary-total"><span>Total</span><span id="grandTotal">₱0.00</span></div>
+        <div class="summary-line"><span>Payable</span><span id="barTotal">₱0.00</span></div>
+
+        <div class="delivery-options">
+          <h4>Delivery method</h4>
+          <label><input type="radio" name="delivery" value="standard" checked> Standard (Free)</label>
+          <label><input type="radio" name="delivery" value="express"> Express (₱80)</label>
+        </div>
+
+        <button id="placeOrderBtn" class="btn">Place order</button>
+      </aside>
+    </div>
+  </main>
+{% endblock %}

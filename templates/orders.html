@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Tracking - Athletic Divinity{% endblock %}
+
+{% block content %}
+<section id="orders-page" class="section-p1">
+  <div class="orders-container">
+    <h2>📦 Order Tracking</h2>
+    <p class="orders-subtitle">View and track all your orders</p>
+
+    {% if orders %}
+    <div class="orders-table-wrapper">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Subtotal</th>
+            <th>Delivery</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr class="order-row">
+            <td class="order-id">#{{ order.id }}</td>
+            <td class="customer-info">
+              <div class="customer-name">{{ order.user_name or 'N/A' }}</div>
+              <div class="customer-email">{{ order.user_email }}</div>
+            </td>
+            <td class="order-items">
+              {% if order.items_count %}
+                {{ order.items_count }} item(s)
+                <button class="expand-btn" onclick="toggleItems(this)">➤</button>
+                <div class="items-detail" style="display:none;">
+                  {% for item in order.parsed_items %}
+                    <div class="item-line">• {{ item.product_name or 'Unknown Item' }} x{{ item.quantity }} @ ₱{{ "%.2f"|format(item.price or 0) }}</div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <span class="no-items">No items</span>
+              {% endif %}
+            </td>
+            <td class="amount">₱{{ "%.2f"|format(order.total_amount) }}</td>
+            <td class="delivery">
+              <span class="delivery-type">{{ order.delivery_type or 'Standard' }}</span>
+              {% if order.delivery_fee %}
+                <span class="delivery-fee">(+₱{{ "%.2f"|format(order.delivery_fee) }})</span>
+              {% endif %}
+            </td>
+            <td class="total-amount">
+              ₱{{ "%.2f"|format(order.total_amount + (order.delivery_fee or 0)) }}
+            </td>
+            <td class="status">
+              <span class="status-badge status-{{ order.status }}">
+                {% if order.status == 'pending' %}
+                  ⏳ Pending
+                {% elif order.status == 'confirmed' %}
+                  ✓ Confirmed
+                {% elif order.status == 'shipped' %}
+                  📮 Shipped
+                {% elif order.status == 'delivered' %}
+                  ✓✓ Delivered
+                {% elif order.status == 'cancelled' %}
+                  ✗ Cancelled
+                {% else %}
+                  {{ order.status }}
+                {% endif %}
+              </span>
+            </td>
+            <td class="order-date">{{ order.created_at }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="orders-summary">
+      <div class="summary-stat">
+        <span class="stat-label">Total Orders:</span>
+        <span class="stat-value">{{ total }}</span>
+      </div>
+      <div class="summary-stat">
+        <span class="stat-label">Total Revenue:</span>
+        <span class="stat-value">₱{{ "%.2f"|format(total_revenue) }}</span>
+      </div>
+    </div>
+
+    {% else %}
+    <div class="no-orders">
+      <p>📭 No orders yet</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+function toggleItems(btn) {
+  const detail = btn.nextElementSibling;
+  if (detail.style.display === 'none') {
+    detail.style.display = 'block';
+    btn.textContent = '▼';
+  } else {
+    detail.style.display = 'none';
+    btn.textContent = '➤';
+  }
+}
+</script>
+{% endblock %}
