@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Athletic Divinity{% endblock %}
+
+{% block content %}
+<section id="hero">
+    <h4>Be the <em>better</em> you.</h4>
+    <h2>Super <strong>value</strong> deals</h2>
+    <h1>On all products</h1>
+    <p>Save more with coupons & up to 60% off!</p>
+    <button>Shop Now</button>
+</section>
+
+<section id="product1" class="section-p1">
+    <h2>Featured Products</h2>
+    <p>Elysium Compression</p>
+    <div class="pro-container" id="featured-products">
+        <!-- Products will be loaded dynamically from API -->
+    </div>
+</section>
+
+<script>
+// Load featured products dynamically from database
+async function loadFeaturedProducts() {
+    try {
+        const response = await fetch('/api/products');
+        const data = await response.json();
+        
+        if (data.success && data.products) {
+            // Show only first 6 products as featured
+            const featured = data.products.slice(0, 6);
+            const container = document.getElementById('featured-products');
+            
+            featured.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'pro';
+                productCard.dataset.id = product.id;
+                productCard.innerHTML = `
+                    <img src="/static/${product.image}">
+                    <div class="des">
+                        <span>${product.brand}</span>
+                        <h5>${product.name}</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}</h4>
+                    </div>
+                    <a href="#"><i class="fa-regular fa-hand-pointer"></i></a>
+                `;
+                container.appendChild(productCard);
+            });
+            
+            // Attach event handlers to newly created product cards
+            if (typeof attachProductCardHandlers === 'function') {
+                attachProductCardHandlers();
+            }
+        }
+    } catch (error) {
+        console.error('Error loading featured products:', error);
+    }
+}
+
+// Load products when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadFeaturedProducts);
+} else {
+    loadFeaturedProducts();
+}
+</script>
+
+<section id="newsletter" class="section-p1 section-m1">
+    <div class="newstext">
+        <h4>Sign up for better deals</h4>
+        <p>Get E-mail updates about our <span>latest offers</span></p>
+    </div>
+    <div class="form">
+        <input type="text" id="newsletter-email" placeholder="Your E-mail address">
+        <button class="normal" id="signup-btn">Sign up</button>
+    </div>
+</section>
+
+{% endblock %}
