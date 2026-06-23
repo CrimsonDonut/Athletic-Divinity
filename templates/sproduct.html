@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Product - Athletic Divinity{% endblock %}
 
@@ -24,13 +24,7 @@
     </form>
 
     <select id="sizeSelect">
-      <option>Select Size</option>
-      <option>XXL</option>
-      <option>XL</option>
-      <option>Large</option>
-      <option>Medium</option>
-      <option>Small</option>
-      <option>XS</option>
+      <option value="">Select Size</option>
     </select>
     <button class="normal">Add To Cart</button>
     <h4>Description </h4>
@@ -84,7 +78,28 @@ async function loadProductDetails() {
         document.getElementById('price').value = product.price;
         document.getElementById('priceDisplay').textContent = `₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
         document.getElementById('totalOutput').value = `Total: ₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
-        document.getElementById('description').textContent = `${product.name} from ${product.brand}. Crafted with premium quality for durability and style.`;
+        // Prefer the real description stored on the product; fall back to a
+        // generic line only if a product hasn't been given one yet.
+        document.getElementById('description').textContent = product.description
+            || `${product.name} from ${product.brand}. Crafted with premium quality for durability and style.`;
+        
+        // Populate the size dropdown from the product's own `sizes` column
+        // (a JSON array, e.g. '["S","M","L","XL","XXL"]') instead of a
+        // hardcoded list that didn't reflect what's actually available.
+        const sizeSelect = document.getElementById('sizeSelect');
+        if (sizeSelect) {
+            let sizes = [];
+            if (product.sizes) {
+                try {
+                    sizes = typeof product.sizes === 'string' ? JSON.parse(product.sizes) : product.sizes;
+                } catch (e) {
+                    console.error('Error parsing sizes JSON:', e);
+                    sizes = [];
+                }
+            }
+            sizeSelect.innerHTML = '<option value="">Select Size</option>' +
+                sizes.map(size => `<option value="${size}">${size}</option>`).join('');
+        }
         
         // Populate thumbnail images
         let images = [];

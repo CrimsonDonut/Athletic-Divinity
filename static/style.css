@@ -2417,3 +2417,39 @@ body.modal-active::before {
     height: 8px;
   }
 }
+/* ===== Pagination controls (men/women/accessories category pages) ===== */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 30px 0 10px;
+}
+
+.pagination .page-btn {
+  background-color: #e6ac0f;
+  color: #111819;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.pagination .page-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  background-color: #f5c233;
+}
+
+.pagination .page-btn:disabled {
+  background-color: #4a4a4a;
+  color: #8a8a8a;
+  cursor: not-allowed;
+}
+
+.pagination .page-info {
+  color: #ffffff;
+  font-size: 14px;
+}

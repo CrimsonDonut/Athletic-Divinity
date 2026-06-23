@@ -8,6 +8,82 @@ let registerModal, closeRegister, openRegister, openLogin;
 let MainImg;
 let selectedProductId, selectedProductImg;
 
+// ===========================
+// PRODUCT CARD RENDERING (shared by index.html, men.html, women.html, accesories.html)
+// ===========================
+
+// Builds the star-rating markup for a product card by comparing the
+// product's rating against each star position (1-5): full star if the
+// rating reaches that position, half star if it's within half a point,
+// otherwise an empty outline star.
+function getStarsHTML(rating) {
+  const value = Number(rating) || 0;
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    if (value >= i) {
+      html += '<i class="fa-solid fa-star"></i>';
+    } else if (value >= i - 0.5) {
+      html += '<i class="fa-solid fa-star-half-stroke"></i>';
+    } else {
+      html += '<i class="fa-regular fa-star"></i>';
+    }
+  }
+  return html;
+}
+
+// Single source of truth for the product card markup. Previously this
+// innerHTML template was copy-pasted into index.html, men.html, women.html,
+// and accesories.html — now every page calls this one function instead.
+function renderProductCard(product) {
+  const price = Number(product.price).toLocaleString('en-PH', { minimumFractionDigits: 2 });
+  return `
+      <img src="/static/${product.image}" alt="${product.name}">
+      <div class="des">
+          <span>${product.brand}</span>
+          <h5>${product.name}</h5>
+          <div class="star">${getStarsHTML(product.rating)}</div>
+          <h4>₱${price}</h4>
+      </div>
+      <a href="#"><i class="fa-regular fa-hand-pointer"></i></a>
+  `;
+}
+
+// Renders Previous/Next pagination controls into the given container based
+// on the current_page/total_pages returned by /api/products, wiring each
+// button to re-run the page's own load function with page - 1 / page + 1.
+function renderPagination(containerId, data, loadFn) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  if (!data.total_pages || data.total_pages <= 1) {
+    return;
+  }
+
+  const prevBtn = document.createElement('button');
+  prevBtn.type = 'button';
+  prevBtn.className = 'page-btn prev-btn';
+  prevBtn.textContent = '← Previous';
+  prevBtn.disabled = data.current_page <= 1;
+  prevBtn.addEventListener('click', () => loadFn(data.current_page - 1));
+
+  const pageInfo = document.createElement('span');
+  pageInfo.className = 'page-info';
+  pageInfo.textContent = `Page ${data.current_page} of ${data.total_pages}`;
+
+  const nextBtn = document.createElement('button');
+  nextBtn.type = 'button';
+  nextBtn.className = 'page-btn next-btn';
+  nextBtn.textContent = 'Next →';
+  nextBtn.disabled = data.current_page >= data.total_pages;
+  nextBtn.addEventListener('click', () => loadFn(data.current_page + 1));
+
+  container.appendChild(prevBtn);
+  container.appendChild(pageInfo);
+  container.appendChild(nextBtn);
+}
+
 // Function to update login/logout UI
 function updateAuthUI() {
   const loggedInUser = localStorage.getItem('loggedInUser');
@@ -805,10 +881,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const placeOrderBtn = document.getElementById("placeOrderBtn");
 
   let cart = [];
+  // Sensible fallback while /api/settings is loading; replaced with the
+  // real value (set once in the database, reflected everywhere) below.
+  let expressDeliveryFee = 80;
 
   function format(n) {
     return "₱" + Number(n).toFixed(2);
   }
+
+  function updateExpressFeeLabel() {
+    const label = document.getElementById("expressFeeLabel");
+    if (label) label.textContent = format(expressDeliveryFee);
+  }
+
+  // Pull the express delivery fee from the settings table so it only ever
+  // needs to be changed in one place (the database) to reflect everywhere.
+  fetch('/api/settings')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success && data.settings && data.settings.express_delivery_fee !== undefined) {
+        expressDeliveryFee = parseFloat(data.settings.express_delivery_fee) || 80;
+      }
+      updateExpressFeeLabel();
+      renderSummary();
+    })
+    .catch(err => console.error("Error loading settings:", err));
 
   function renderSummary() {
     const loggedInUser = localStorage.getItem('loggedInUser');
@@ -847,7 +944,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const delivery = document.querySelector("input[name='delivery']:checked")?.value || "standard";
-        const deliveryFee = delivery === "express" ? 80 : 0;
+        const deliveryFee = delivery === "express" ? expressDeliveryFee : 0;
 
         itemsTotalEl.textContent = format(itemsTotal);
         deliveryFeeEl.textContent = format(deliveryFee);
@@ -923,7 +1020,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const delivery = document.querySelector("input[name='delivery']:checked")?.value || "standard";
-    const deliveryFee = delivery === "express" ? 80 : 0;
+    const deliveryFee = delivery === "express" ? expressDeliveryFee : 0;
     const grandTotal = itemsTotal + deliveryFee;
 
     // Create order
@@ -1338,18 +1435,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// === SHOP NOW BUTTON (scroll to products on phones) ===
+// === SHOP NOW BUTTON (scroll to the featured products on any screen size) ===
 document.addEventListener("DOMContentLoaded", () => {
   const shopNowBtn = document.querySelector("#hero button");
-  
+
   if (shopNowBtn) {
     shopNowBtn.addEventListener("click", () => {
-      // Only scroll on mobile screens (max-width: 477px)
-      if (window.innerWidth <= 477) {
-        const productsSection = document.getElementById("product1");
-        if (productsSection) {
-          productsSection.scrollIntoView({ behavior: "smooth" });
-        }
+      const productsSection = document.getElementById("product1");
+      if (productsSection) {
+        productsSection.scrollIntoView({ behavior: "smooth" });
+      } else {
+        // Fallback for pages where #product1 doesn't exist
+        window.location.href = "/women";
       }
     });
   }
@@ -1376,6 +1473,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       
+      // Confirm signup before redirecting to finish registration
+      alert("✅ Thanks for signing up! Let's get your account set up.");
+
       // Redirect to register page with email as query parameter
       window.location.href = `/register?email=${encodeURIComponent(email)}`;
     });

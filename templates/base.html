@@ -39,14 +39,14 @@
         <div class="col">
             <img class="logo" src="{{ url_for('static', filename='img/logoreal.png') }}" height="100" width="130" alt="">
             <h4>Contact</h4>
-            <p> <strong>Address:</strong> Tanauan City, Batangas, Philippines</p>
-            <p><strong>Phone:</strong> 0927 929 1959</p>
-            <p><strong>Hours:</strong> 10:00 - 18:00, Mon - Sat </p>
+            <p> <strong>Address:</strong> <span id="footer-address">Tanauan City, Batangas, Philippines</span></p>
+            <p><strong>Phone:</strong> <span id="footer-phone">0927 929 1959</span></p>
+            <p><strong>Hours:</strong> <span id="footer-hours">10:00 - 18:00, Mon - Sat</span></p>
             <div class="follow">
                 <h4>Follow Us</h4>
                 <div class="icon">
-                    <a href="https://www.facebook.com/profile.php?id=61566931697897" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/crimsonndonut/?hl=en" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a id="footer-facebook" href="https://www.facebook.com/profile.php?id=61566931697897" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a id="footer-instagram" href="https://www.instagram.com/crimsonndonut/?hl=en" target="_blank"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
@@ -54,11 +54,7 @@
         <div class="col">
             <h4>About</h4>
             <a href="{{ url_for('about') }}">About Us</a>
-            <a href="#">Refer a friend</a>
-            <a href="#">Sustainability</a>
-            <a href="#">Training App</a>
             <a href="{{ url_for('terms') }}">Terms & Conditions</a>
-            <a href="#">Privacy Notice</a>
         </div>
 
          <div class="col">
@@ -156,7 +152,34 @@
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     {% block scripts %}{% endblock %}
-    
+
+    <script>
+      // Load business settings (contact info, social links) from the
+      // database instead of having them hardcoded in this template, so
+      // changing them in one place (the settings table) updates every page.
+      document.addEventListener('DOMContentLoaded', () => {
+        fetch('/api/settings')
+          .then(response => response.json())
+          .then(data => {
+            if (!data.success || !data.settings) return;
+            const s = data.settings;
+
+            const addressEl = document.getElementById('footer-address');
+            const phoneEl = document.getElementById('footer-phone');
+            const hoursEl = document.getElementById('footer-hours');
+            const fbEl = document.getElementById('footer-facebook');
+            const igEl = document.getElementById('footer-instagram');
+
+            if (addressEl && s.contact_address) addressEl.textContent = s.contact_address;
+            if (phoneEl && s.contact_phone) phoneEl.textContent = s.contact_phone;
+            if (hoursEl && s.contact_hours) hoursEl.textContent = s.contact_hours;
+            if (fbEl && s.facebook_url) fbEl.href = s.facebook_url;
+            if (igEl && s.instagram_url) igEl.href = s.instagram_url;
+          })
+          .catch(err => console.error('Error loading settings:', err));
+      });
+    </script>
+
     <script>
       // Highlight the current page in navbar
       document.addEventListener('DOMContentLoaded', () => {
@@ -177,3 +200,4 @@
     </script>
 </body>
 </html>
+

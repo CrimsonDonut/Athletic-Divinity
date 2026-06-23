@@ -1,2 +1,0 @@
-remove unnecesarry files
-make it ready for deployment and presentable for portfolio

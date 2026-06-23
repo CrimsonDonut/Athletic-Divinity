@@ -35,22 +35,7 @@ async function loadFeaturedProducts() {
                 const productCard = document.createElement('div');
                 productCard.className = 'pro';
                 productCard.dataset.id = product.id;
-                productCard.innerHTML = `
-                    <img src="/static/${product.image}">
-                    <div class="des">
-                        <span>${product.brand}</span>
-                        <h5>${product.name}</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}</h4>
-                    </div>
-                    <a href="#"><i class="fa-regular fa-hand-pointer"></i></a>
-                `;
+                productCard.innerHTML = renderProductCard(product);
                 container.appendChild(productCard);
             });
             

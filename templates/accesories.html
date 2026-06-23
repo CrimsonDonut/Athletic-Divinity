@@ -12,44 +12,38 @@
         <div class="pro-container" id="accessories-products">
             <!-- Products will be loaded dynamically from API -->
         </div>
+        <div class="pagination" id="accessories-pagination">
+            <!-- Pagination controls rendered dynamically -->
+        </div>
     </section>
 
 <script>
 // Load accessories products dynamically from database
-async function loadAccessoriesProducts() {
+async function loadAccessoriesProducts(page = 1) {
     try {
-        const response = await fetch('/api/products?category=accessories');
+        const response = await fetch(`/api/products?category=accessories&page=${page}`);
         const data = await response.json();
         
         if (data.success && data.products) {
             const container = document.getElementById('accessories-products');
+            container.innerHTML = '';
             
             data.products.forEach(product => {
                 const productCard = document.createElement('div');
                 productCard.className = 'pro';
                 productCard.dataset.id = product.id;
-                productCard.innerHTML = `
-                    <img src="/static/${product.image}" alt="">
-                    <div class="des">
-                        <span>${product.brand}</span>
-                        <h5>${product.name}</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₱${product.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}</h4>
-                    </div>
-                    <a href="#"><i class="fa-regular fa-hand-pointer"></i></a>
-                `;
+                productCard.innerHTML = renderProductCard(product);
                 container.appendChild(productCard);
             });
             
             // Attach event handlers to newly created product cards
             if (typeof attachProductCardHandlers === 'function') {
                 attachProductCardHandlers();
+            }
+
+            // Render Previous/Next controls when there's more than one page
+            if (typeof renderPagination === 'function') {
+                renderPagination('accessories-pagination', data, loadAccessoriesProducts);
             }
         }
     } catch (error) {
@@ -59,9 +53,9 @@ async function loadAccessoriesProducts() {
 
 // Load products when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadAccessoriesProducts);
+    document.addEventListener('DOMContentLoaded', () => loadAccessoriesProducts(1));
 } else {
-    loadAccessoriesProducts();
+    loadAccessoriesProducts(1);
 }
 </script>
 {% endblock %}
